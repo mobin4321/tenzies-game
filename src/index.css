@@ -1,0 +1,76 @@
+* {
+  margin: 0;
+  padding: 0;
+  font-family: "Inter", sans-serif;
+}
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  min-height: 100vh;
+  background-color: #0b2434;
+}
+
+.window {
+  background-color: rgb(224, 224, 223);
+  /* max-width: 400px; */
+  height: 20rem;
+  width: fit-content;
+  box-shadow: -1px 1px 15px rgba(73, 71, 71, 0.7);
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  padding: 30px;
+}
+.window > p {
+  width: 23rem;
+  line-height: 20px;
+  text-align: center;
+}
+.dies {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-gap: 18px;
+}
+
+.die {
+  width: 45px;
+  height: 45px;
+  border-radius: 10px;
+  background-color: white;
+  border: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 13px;
+  font-weight: 400;
+  color: black;
+  box-shadow: -1px 1px 6px rgba(73, 71, 71, 0.3);
+}
+.won {
+  color: green;
+  margin-top: 4px;
+  visibility: hidden;
+}
+.wonVisible {
+  visibility: visible;
+}
+.lockedDie {
+  background-color: rgb(110, 197, 110);
+}
+.die > h1 {
+  font-size: 24px;
+}
+.roll-btn {
+  width: 80px;
+  height: 35px;
+  border: none;
+  border-radius: 7px;
+  background: rgb(98, 43, 226);
+  color: white;
+  letter-spacing: 0.7px;
+  box-shadow: -1px 1px 6px rgba(73, 71, 71, 0.3);
+}
