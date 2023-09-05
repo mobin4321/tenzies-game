@@ -40,8 +40,8 @@
   width: 45px;
   height: 45px;
   border-radius: 10px;
-  background-color: white;
-  border: none;
+  background-color: #eee7e7;
+  border: 1px solid #d6d4d4;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -49,6 +49,22 @@
   font-weight: 400;
   color: black;
   box-shadow: -1px 1px 6px rgba(73, 71, 71, 0.3);
+  padding: 10px;
+}
+.die-dots {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+}
+
+.dot {
+  background-color: black;
+  width: 5px;
+  height: 5px;
+  border-radius: 10px;
+  margin: 2.5px;
+  box-shadow: 0px 0px 2px gray;
 }
 .won {
   color: green;
@@ -61,9 +77,7 @@
 .lockedDie {
   background-color: rgb(110, 197, 110);
 }
-.die > h1 {
-  font-size: 24px;
-}
+
 .roll-btn {
   width: 80px;
   height: 35px;
@@ -73,4 +87,9 @@
   color: white;
   letter-spacing: 0.7px;
   box-shadow: -1px 1px 6px rgba(73, 71, 71, 0.3);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.roll-btn:active {
+  opacity: 0.5;
 }
