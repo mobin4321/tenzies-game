@@ -6,17 +6,35 @@ function App() {
   const [numbers, setNumbers] = React.useState([]);
   const [locked, setLocked] = React.useState([]);
   const [win, setWin] = React.useState(false);
+  const maxTime = 30;
+  let [timer, setTimer] = React.useState(maxTime);
+  const [message, setMessage] = React.useState("YOU WON");
   const length = 8;
+  const [bestTime, setBestTime] = React.useState();
 
-  function areAllElementsSame() {
-    const firstElement = numbers[0];
-    for (let i = 1; i < numbers.length; i++) {
-      if (numbers[i] !== firstElement) {
-        return false;
-      }
+  React.useEffect(() => {
+    roll();
+    localStorage.setItem("best", maxTime);
+    setBestTime(maxTime);
+  }, []);
+
+  React.useEffect(() => {
+    let intervalId;
+    if (timer > 0) {
+      intervalId = setInterval(() => {
+        setTimer((prev) => prev - 1);
+      }, 1000);
     }
-    return true;
-  }
+
+    if (timer === 0 || win) {
+      clearInterval(intervalId);
+    }
+    if (timer === 0) {
+      setMessage("Time Out!");
+    }
+
+    return () => clearInterval(intervalId);
+  }, [new Date().getSeconds()]);
 
   const dies = numbers.map((number, index) => {
     return (
@@ -29,16 +47,28 @@ function App() {
     );
   });
 
-  React.useEffect(() => {
-    roll();
-  }, []);
+  function isWin() {
+    const firstElement = numbers[0];
+    for (let i = 1; i < numbers.length; i++) {
+      if (numbers[i] !== firstElement) {
+        return false;
+      }
+    }
+    setWin(true);
+    setMessage("YOU WON");
+    console.log(win);
+    maxTime - timer < localStorage.getItem("best") &&
+      localStorage.setItem("best", maxTime - timer);
+    setBestTime(localStorage.getItem("best"));
+    return true;
+  }
 
   function roll() {
     if (win) {
+      setTimer(maxTime);
       resetGame();
       return;
     }
-
     setNumbers((prevNumbers) => {
       const arr = [...prevNumbers];
       for (let i = 0; i < length; i++) {
@@ -54,7 +84,6 @@ function App() {
   function resetGame() {
     setLocked([]);
     setWin(false);
-
     setNumbers((prevNumbers) => {
       const arr = [...prevNumbers];
       for (let i = 0; i < length; i++) {
@@ -65,16 +94,13 @@ function App() {
   }
 
   function lockToggle(index) {
-    if (areAllElementsSame()) {
-      setWin((prev) => !prev);
-    }
-
     setLocked((prev) => {
       if (prev.includes(index)) {
         return prev.filter((item) => item !== index);
       }
       return [...prev, index];
     });
+    isWin();
   }
 
   function getRandomNumber() {
@@ -84,6 +110,8 @@ function App() {
   return (
     <div className="container">
       <div className="window">
+        <h5 className="bestTime">{`Best Time : ${bestTime}s`}</h5>
+        <h5 className="timer">{`Remaining Time : ${timer}s`}</h5>
         {win && <Confetti />}
         <h1>Tenzies</h1>
         <p>
@@ -91,12 +119,11 @@ function App() {
           current value between rolls.
         </p>
         <div className="dies">{dies}</div>
-        <h4 className={`won ${win && "wonVisible"}`}>YOU WON</h4>
-        <button
-          className={`roll-btn ${win === true && "resetGame"}`}
-          onClick={roll}
-        >
-          {win ? "Reset Game" : "Roll"}
+        <h4 className={`won ${(win || timer === 0) && "wonVisible"}`}>
+          {message}
+        </h4>
+        <button className={`roll-btn ${win && "resetGame"}`} onClick={roll}>
+          {win || !timer ? "Reset Game" : "Roll"}
         </button>
       </div>
     </div>
